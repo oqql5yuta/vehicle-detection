@@ -1,5 +1,7 @@
+%%writefile yolo_pipeline.py
+
 # import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 # import cv2
 from timeit import default_timer as timer
 # import time
@@ -25,7 +27,8 @@ class yolo_tf:
 
     def build_networks(self):
         print("Building YOLO_small graph...")
-        self.x = tf.placeholder('float32',[None,448,448,3])
+        tf.compat.v1.disable_eager_execution()
+        self.x = tf.compat.v1.placeholder('float32',[None,448,448,3])
         # self.x = tf.placeholder('float32',[None,252, 1280, 3])
         self.conv_1 = self.conv_layer(1,self.x,64,7,2)
         self.pool_2 = self.pooling_layer(2,self.conv_1,2,2)
@@ -219,3 +222,4 @@ def vehicle_detection_yolo(image, image_lane, lane_info):
     yolo_result = draw_results(image, image_lane, yolo, fps, lane_info)
 
     return yolo_result
+
